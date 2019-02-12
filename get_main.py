@@ -140,6 +140,7 @@ def get_valid_performance(DATA, MASK, in_parser, out_itr, eval_time=None, MAX_VA
     print( "MAIN TRAINING ...")
     print( "EVALUATION TIMES: " + str(eval_time))
 
+    avg_loss = 0
     for itr in range(iteration):
         if stop_flag > 5: #for faster early stopping
             break
@@ -149,9 +150,11 @@ def get_valid_performance(DATA, MASK, in_parser, out_itr, eval_time=None, MAX_VA
             MASK = (m1_mb, m2_mb)
             PARAMETERS = (alpha, beta, gamma)
             _, loss_curr = model.train(DATA, MASK, PARAMETERS, keep_prob, lr_train)
+            avg_loss += loss_curr/1000
                 
             if (itr+1)%1000 == 0:
-                print('|| ITR: ' + str('%04d' % (itr + 1)) + ' | Loss: ' + colored(str('%.4f' %(loss_curr)), 'yellow' , attrs=['bold']))
+                print('|| ITR: ' + str('%04d' % (itr + 1)) + ' | Loss: ' + colored(str('%.4f' %(avg_loss)), 'yellow' , attrs=['bold']))
+                avg_loss = 0
 
             ### VALIDATION  (based on average C-index of our interest)
             if (itr+1)%1000 == 0:
