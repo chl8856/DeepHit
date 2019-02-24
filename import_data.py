@@ -107,7 +107,7 @@ def import_dataset_METABRIC(norm_mode='standard'):
 
     data  = np.asarray(df1)
     time  = np.asarray(df2[['event_time']])
-    time  = int(time/12.) #unit time = month
+    # time  = np.round(time/12.) #unit time = month
     label = np.asarray(df2[['label']])
 
     

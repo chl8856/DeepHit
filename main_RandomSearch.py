@@ -97,11 +97,8 @@ def get_random_hyperparameters(out_path):
 OUT_ITERATION               = 5
 RS_ITERATION                = 50
 
-data_mode                   = 'SYNTHETIC'
+data_mode                   = 'METABRIC'
 seed                        = 1234
-
-EVAL_TIMES = [12, 24, 36] # set specific evaluation time horizons at which the validatoin performance is maximized. (This must be selected based on the dataset)
-# EVAL_TIMES    = None
 
 
 ##### IMPORT DATASET
@@ -111,11 +108,17 @@ EVAL_TIMES = [12, 24, 36] # set specific evaluation time horizons at which the v
     max_length              = maximum number of measurements
     x_dim                   = data dimension including delta (num_features)
     mask1, mask2            = used for cause-specific network (FCNet structure)
+
+    EVAL_TIMES              = set specific evaluation time horizons at which the validatoin performance is maximized. 
+    						  (This must be selected based on the dataset)
+
 '''
 if data_mode == 'SYNTHETIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SYNTHETIC(norm_mode = 'standard')
+    EVAL_TIMES = [12, 24, 36]
 elif data_mode == 'METABRIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
+	EVAL_TIMES = [144, 288, 432] 
 else:
     print('ERROR:  DATA_MODE NOT FOUND !!!')
 
