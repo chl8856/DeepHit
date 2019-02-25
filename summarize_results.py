@@ -52,7 +52,7 @@ OUT_ITERATION               = 5
 data_mode                   = 'SYNTHETIC' #METABRIC, SYNTHETIC
 seed                        = 1234
 
-eval_time                   = [1, 5, 10] # evalution times (for C-index and Brier-Score)
+EVAL_TIMES                  = [12, 24, 36] # evalution times (for C-index and Brier-Score)
 
 
 ##### IMPORT DATASET
@@ -65,8 +65,10 @@ eval_time                   = [1, 5, 10] # evalution times (for C-index and Brie
 '''
 if data_mode == 'SYNTHETIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SYNTHETIC(norm_mode = 'standard')
+    EVAL_TIMES  = [12, 24, 36]
 elif data_mode == 'METABRIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
+    EVAL_TIMES  = [144, 288, 432]
 else:
     print('ERROR:  DATA_MODE NOT FOUND !!!')
 
@@ -80,8 +82,8 @@ if not os.path.exists(in_path):
     os.makedirs(in_path)
 
 
-FINAL1 = np.zeros([num_Event, len(eval_time), OUT_ITERATION])
-FINAL2 = np.zeros([num_Event, len(eval_time), OUT_ITERATION])
+FINAL1 = np.zeros([num_Event, len(EVAL_TIMES), OUT_ITERATION])
+FINAL2 = np.zeros([num_Event, len(EVAL_TIMES), OUT_ITERATION])
 
 
 for out_itr in range(OUT_ITERATION):
@@ -163,9 +165,9 @@ for out_itr in range(OUT_ITERATION):
     pred = model.predict(te_data)
     
     ### EVALUATION
-    result1, result2 = np.zeros([num_Event, len(eval_time)]), np.zeros([num_Event, len(eval_time)])
+    result1, result2 = np.zeros([num_Event, len(EVAL_TIMES)]), np.zeros([num_Event, len(EVAL_TIMES)])
 
-    for t, t_time in enumerate(eval_time):
+    for t, t_time in enumerate(EVAL_TIMES):
         eval_horizon = int(t_time)
 
         if eval_horizon >= num_Category:
@@ -173,7 +175,7 @@ for out_itr in range(OUT_ITERATION):
             result1[:, t] = result2[:, t] = -1
         else:
             # calculate F(t | x, Y, t >= t_M) = \sum_{t_M <= \tau < t} P(\tau | x, Y, \tau > t_M)
-            risk = np.sum(pred[:,:,:(eval_horizon+1)], axis=2) #risk score until eval_time
+            risk = np.sum(pred[:,:,:(eval_horizon+1)], axis=2) #risk score until EVAL_TIMES
             for k in range(num_Event):
                 # result1[k, t] = c_index(risk[:,k], te_time, (te_label[:,0] == k+1).astype(float), eval_horizon) #-1 for no event (not comparable)
                 # result2[k, t] = brier_score(risk[:,k], te_time, (te_label[:,0] == k+1).astype(float), eval_horizon) #-1 for no event (not comparable)
@@ -190,7 +192,7 @@ for out_itr in range(OUT_ITERATION):
 
     col_header1 = []
     col_header2 = []
-    for t in eval_time:
+    for t in EVAL_TIMES:
         col_header1.append(str(t) + 'yr c_index')
         col_header2.append(str(t) + 'yr B_score')
 

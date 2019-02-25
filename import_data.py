@@ -82,6 +82,7 @@ def import_dataset_SYNTHETIC(norm_mode='standard'):
     label           = np.asarray(df[['label']])
     time            = np.asarray(df[['time']])
     data            = np.asarray(df.iloc[:,4:])
+    data            = f_get_Normalization(data, norm_mode)
 
     num_Category    = int(np.max(time) * 1.2)  #to have enough time-horizon
     num_Event       = int(len(np.unique(label)) - 1) #only count the number of events (do not count censoring as an event)
@@ -106,6 +107,8 @@ def import_dataset_METABRIC(norm_mode='standard'):
     df2 = pd.read_csv(in_filename2, sep =',')
 
     data  = np.asarray(df1)
+    data  = f_get_Normalization(data, norm_mode)
+    
     time  = np.asarray(df2[['event_time']])
     # time  = np.round(time/12.) #unit time = month
     label = np.asarray(df2[['label']])
