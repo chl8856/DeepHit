@@ -59,8 +59,8 @@ class Model_DeepHit:
 
         self.active_fn          = network_settings['active_fn']
         self.initial_W          = network_settings['initial_W']
-        self.reg_W              = tf.contrib.layers.l2_regularizer(scale=1.0)
-        self.reg_W_out          = tf.contrib.layers.l1_regularizer(scale=1.0)
+        self.reg_W              = tf.contrib.layers.l2_regularizer(scale=1e-4)
+        self.reg_W_out          = tf.contrib.layers.l1_regularizer(scale=1e-4)
 
         self._build_net()
 
@@ -108,7 +108,7 @@ class Model_DeepHit:
             self.loss_Ranking()             #get loss2: Ranking loss
             self.loss_Calibration()         #get loss3: Calibration loss
 
-            self.LOSS_TOTAL = self.a*self.LOSS_1 + self.b*self.LOSS_2 + self.c*self.LOSS_3
+            self.LOSS_TOTAL = self.a*self.LOSS_1 + self.b*self.LOSS_2 + self.c*self.LOSS_3 + tf.losses.get_regularization_loss()
             self.solver = tf.train.AdamOptimizer(learning_rate=self.lr_rate).minimize(self.LOSS_TOTAL)
 
 
