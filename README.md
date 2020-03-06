@@ -3,7 +3,7 @@ Title: "DeepHit: A Deep Learning Approach to Survival Analysis with Competing Ri
 
 Authors: Changhee Lee, William R. Zame, Jinsung Yoon, Mihaela van der Schaar
 
-- Reference: C. Lee, W. R. Zame, J. Yoon, M. van der Schaar, "Yoon, J. Jordon, M. van der Schaar, "DeepHit: A Deep Learning Approach to Survival Analysis with Competing Risks," AAAI Conference on Artificial Intelligence (AAAI), 2018
+- Reference: C. Lee, W. R. Zame, J. Yoon, M. van der Schaar, "DeepHit: A Deep Learning Approach to Survival Analysis with Competing Risks," AAAI Conference on Artificial Intelligence (AAAI), 2018
 - Paper: http://medianetlab.ee.ucla.edu/papers/AAAI_2018_DeepHit
 - Supplementary: http://medianetlab.ee.ucla.edu/papers/AAAI_2018_DeepHit_Appendix
 
