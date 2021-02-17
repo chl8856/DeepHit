@@ -68,7 +68,7 @@ def get_random_hyperparameters(out_path):
 
     new_parser = {'mb_size': SET_BATCH_SIZE[np.random.randint(len(SET_BATCH_SIZE))],
 
-                 'iteration': 50000,
+                 'iteration': 10000,
 
                  'keep_prob': 0.6,
                  'lr_train': 1e-4,
@@ -90,64 +90,64 @@ def get_random_hyperparameters(out_path):
     
     return new_parser #outputs the dictionary of the randomly-chosen hyperparamters
 
+if __name__ == '__main__':
+    ##### MAIN SETTING
+    OUT_ITERATION               = 5
+    RS_ITERATION                = 10
+
+    data_mode                   = 'CUSTOMERS'
+    seed                        = 1234
+
+    ##### IMPORT DATASET
+    '''
+        num_Category            = typically, max event/censoring time * 1.2 (to make enough time horizon)
+        num_Event               = number of evetns i.e. len(np.unique(label))-1
+        max_length              = maximum number of measurements
+        x_dim                   = data dimension including delta (num_features)
+        mask1, mask2            = used for cause-specific network (FCNet structure)
+
+        EVAL_TIMES              = set specific evaluation time horizons at which the validatoin performance is maximized. 
+                                (This must be selected based on the dataset)
+
+    '''
+    if data_mode == 'SYNTHETIC':
+        (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SYNTHETIC(norm_mode = 'standard')
+        EVAL_TIMES = [12, 24, 36]
+    elif data_mode == 'METABRIC':
+        (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
+        EVAL_TIMES = [144, 288, 432]
+    elif data_mode == 'CUSTOMERS':
+        (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_CUSTOMERS(norm_mode = 'standard', use_tiny_dataset=False)
+        EVAL_TIMES = [14, 35, 75, 130, 200, 370]
+    else:
+        print('ERROR:  DATA_MODE NOT FOUND !!!')
 
 
+    DATA = (data, time, label)
+    MASK = (mask1, mask2) #masks are required to calculate loss functions without for-loops.
 
-##### MAIN SETTING
-OUT_ITERATION               = 5
-RS_ITERATION                = 50
+    out_path      = data_mode + '/results/'
 
-data_mode                   = 'METABRIC'
-seed                        = 1234
+    for itr in range(OUT_ITERATION):
+        
+        if not os.path.exists(out_path + '/itr_' + str(itr) + '/'):
+            os.makedirs(out_path + '/itr_' + str(itr) + '/')
 
+        max_valid = 0.
+        log_name = out_path + '/itr_' + str(itr) + '/hyperparameters_log.txt'
 
-##### IMPORT DATASET
-'''
-    num_Category            = typically, max event/censoring time * 1.2 (to make enough time horizon)
-    num_Event               = number of evetns i.e. len(np.unique(label))-1
-    max_length              = maximum number of measurements
-    x_dim                   = data dimension including delta (num_features)
-    mask1, mask2            = used for cause-specific network (FCNet structure)
+        for r_itr in range(RS_ITERATION):
+            print('OUTER_ITERATION: ' + str(itr))
+            print('Random search... itr: ' + str(r_itr))
+            new_parser = get_random_hyperparameters(out_path)
+            print(new_parser)
 
-    EVAL_TIMES              = set specific evaluation time horizons at which the validatoin performance is maximized. 
-    						  (This must be selected based on the dataset)
+            # get validation performance given the hyperparameters
+            tmp_max = get_main.get_valid_performance(DATA, MASK, new_parser, itr, EVAL_TIMES, MAX_VALUE=max_valid)
 
-'''
-if data_mode == 'SYNTHETIC':
-    (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SYNTHETIC(norm_mode = 'standard')
-    EVAL_TIMES = [12, 24, 36]
-elif data_mode == 'METABRIC':
-    (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
-	EVAL_TIMES = [144, 288, 432] 
-else:
-    print('ERROR:  DATA_MODE NOT FOUND !!!')
+            if tmp_max > max_valid:
+                max_valid = tmp_max
+                max_parser = new_parser
+                save_logging(max_parser, log_name)  #save the hyperparameters if this provides the maximum validation performance
 
-
-DATA = (data, time, label)
-MASK = (mask1, mask2) #masks are required to calculate loss functions without for-loops.
-
-out_path      = data_mode + '/results/'
-
-for itr in range(OUT_ITERATION):
-    
-    if not os.path.exists(out_path + '/itr_' + str(itr) + '/'):
-        os.makedirs(out_path + '/itr_' + str(itr) + '/')
-
-    max_valid = 0.
-    log_name = out_path + '/itr_' + str(itr) + '/hyperparameters_log.txt'
-
-    for r_itr in range(RS_ITERATION):
-        print('OUTER_ITERATION: ' + str(itr))
-        print('Random search... itr: ' + str(r_itr))
-        new_parser = get_random_hyperparameters(out_path)
-        print(new_parser)
-
-        # get validation performance given the hyperparameters
-        tmp_max = get_main.get_valid_performance(DATA, MASK, new_parser, itr, EVAL_TIMES, MAX_VALUE=max_valid)
-
-        if tmp_max > max_valid:
-            max_valid = tmp_max
-            max_parser = new_parser
-            save_logging(max_parser, log_name)  #save the hyperparameters if this provides the maximum validation performance
-
-        print('Current best: ' + str(max_valid))
+            print('Current best: ' + str(max_valid))

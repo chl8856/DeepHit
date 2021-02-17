@@ -127,3 +127,30 @@ def import_dataset_METABRIC(norm_mode='standard'):
     MASK            = (mask1, mask2)
 
     return DIM, DATA, MASK
+
+def import_dataset_CUSTOMERS(norm_mode='standard', use_tiny_dataset=False):
+    in_filename = "./sample data/CUSTOMERS/customers_out.csv"
+    df = pd.read_csv(in_filename, sep =',')
+
+    if use_tiny_dataset:
+        df = df.iloc[0:len(df)//10,:]
+
+    label = np.asarray(df[['label']]) # churn (1) or (0) no-churn/ ignore
+    time = np.asarray(df[['time']]) # number of days to event
+    data = np.asarray(df.iloc[:,2:]) # variables used to estimate/explain survival_curve
+
+    data  = f_get_Normalization(data, norm_mode)
+    
+    num_Category    = int(np.max(time)+1)        #to have enough time-horizon
+    num_Event       = int(len(np.unique(label)) - 1) #only count the number of events (do not count censoring as an event)
+
+    x_dim           = np.shape(data)[1]
+
+    mask1           = f_get_fc_mask2(time, label, num_Event, num_Category)
+    mask2           = f_get_fc_mask3(time, -1, num_Category)
+
+    DIM             = (x_dim)
+    DATA            = (data, time, label)
+    MASK            = (mask1, mask2)
+
+    return DIM, DATA, MASK

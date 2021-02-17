@@ -6,6 +6,7 @@ See equations and descriptions eq. (11) and (12) of the following paper:
     - C. Lee, W. R. Zame, A. Alaa, M. van der Schaar, "Temporal Quilting for Survival Analysis", AISTATS 2019
 '''
 
+from multiprocessing import Pool, cpu_count
 import numpy as np
 from lifelines import KaplanMeierFitter
 
@@ -69,6 +70,71 @@ def CensoringProb(Y, T):
 
 
 ### C(t)-INDEX CALCULATION: this account for the weighted average for unbaised estimation
+# def weighted_c_index(T_train, Y_train, Prediction, T_test, Y_test, Time):
+#     '''
+#         This is a cause-specific c(t)-index
+#         - Prediction      : risk at Time (higher --> more risky)
+#         - Time_survival   : survival/censoring time
+#         - Death           :
+#             > 1: death
+#             > 0: censored (including death from other cause)
+#         - Time            : time of evaluation (time-horizon when evaluating C-index)
+#     '''
+#     G = CensoringProb(Y_train, T_train)
+
+#     N = len(Prediction)
+#     A = np.zeros((N,N))
+#     Q = np.zeros((N,N))
+#     N_t = np.zeros((N,N))
+#     Num = 0
+#     Den = 0
+#     for i in range(N):
+#         tmp_idx = np.where(G[0,:] >= T_test[i])[0]
+
+#         if len(tmp_idx) == 0:
+#             W = (1./G[1, -1])**2
+#         else:
+#             W = (1./G[1, tmp_idx[0]])**2
+
+#         A[i, np.where(T_test[i] < T_test)] = 1. * W
+#         Q[i, np.where(Prediction[i] > Prediction)] = 1. # give weights
+
+#         if (T_test[i]<=Time and Y_test[i]==1):
+#             N_t[i,:] = 1.
+
+#     Num  = np.sum(((A)*N_t)*Q)
+#     Den  = np.sum((A)*N_t)
+
+#     if Num == 0 and Den == 0:
+#         result = -1 # not able to compute c-index!
+#     else:
+#         result = float(Num/Den)
+
+#     return result
+
+def get_result(n_i_start, n_i_end, N, G, Prediction, T_test, Y_test, Time):
+    n_l = n_i_end - n_i_start
+    A = np.zeros((n_l,N))
+    Q = np.zeros((n_l,N))
+    N_t = np.zeros((n_l,N))
+    for n_i in range(n_i_start, n_i_end):
+        tmp_idx = np.where(G[0,:] >= T_test[n_i])[0]
+
+        if len(tmp_idx) == 0:
+            W = (1./G[1, -1])**2
+        else:
+            W = (1./G[1, tmp_idx[0]])**2
+
+        A[n_i-n_i_start, np.where(T_test[n_i] < T_test)] = 1. * W
+        Q[n_i-n_i_start, np.where(Prediction[n_i] > Prediction)] = 1. # give weights
+
+        if (T_test[n_i]<=Time and Y_test[n_i]==1):
+            N_t[n_i-n_i_start, :] = 1.
+
+    return (np.sum(((A)*N_t)*Q), np.sum((A)*N_t))
+
+
+### C(t)-INDEX CALCULATION: this account for the weighted average for unbaised estimation
 def weighted_c_index(T_train, Y_train, Prediction, T_test, Y_test, Time):
     '''
         This is a cause-specific c(t)-index
@@ -80,35 +146,44 @@ def weighted_c_index(T_train, Y_train, Prediction, T_test, Y_test, Time):
         - Time            : time of evaluation (time-horizon when evaluating C-index)
     '''
     G = CensoringProb(Y_train, T_train)
-
     N = len(Prediction)
-    A = np.zeros((N,N))
-    Q = np.zeros((N,N))
-    N_t = np.zeros((N,N))
-    Num = 0
-    Den = 0
-    for i in range(N):
-        tmp_idx = np.where(G[0,:] >= T_test[i])[0]
 
-        if len(tmp_idx) == 0:
-            W = (1./G[1, -1])**2
-        else:
-            W = (1./G[1, tmp_idx[0]])**2
+    Num_list = []
+    Den_list = []
 
-        A[i, np.where(T_test[i] < T_test)] = 1. * W
-        Q[i, np.where(Prediction[i] > Prediction)] = 1. # give weights
+    def update_result_callback(result):
+        (num, den) = result
+        Num_list.append(num)
+        Den_list.append(den)
 
-        if (T_test[i]<=Time and Y_test[i]==1):
-            N_t[i,:] = 1.
+    def error_handler(e):
+        print(e)
 
-    Num  = np.sum(((A)*N_t)*Q)
-    Den  = np.sum((A)*N_t)
+    n_processes = cpu_count() - 1
+    max_num_per_process = 200
+    with Pool(n_processes) as pool:
+        results = []
+        n_curr = 0
+        while n_curr < N:
+            for _ in range(n_processes):
+                i_start = n_curr
+                if n_curr + max_num_per_process >= N:
+                    i_end = N
+                else:
+                    i_end = n_curr + max_num_per_process
+                n_curr = i_end
+                r = pool.apply_async(get_result, (i_start, i_end, N, G, Prediction, T_test, Y_test, Time), callback=update_result_callback, error_callback=error_handler)
+                results.append(r)
+            for r in results:
+                r.wait()
 
+    Num = np.sum(Num_list)
+    Den = np.sum(Den_list)
     if Num == 0 and Den == 0:
         result = -1 # not able to compute c-index!
     else:
         result = float(Num/Den)
-
+    
     return result
 
 
