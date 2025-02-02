@@ -118,7 +118,7 @@ if data_mode == 'SYNTHETIC':
     EVAL_TIMES = [12, 24, 36]
 elif data_mode == 'METABRIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
-	EVAL_TIMES = [144, 288, 432] 
+    EVAL_TIMES = [144, 288, 432] 
 else:
     print('ERROR:  DATA_MODE NOT FOUND !!!')
 
