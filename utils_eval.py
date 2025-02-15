@@ -139,4 +139,3 @@ def weighted_brier_score(T_train, Y_train, Prediction, T_test, Y_test, Time):
 
     return np.mean(W*(Y_tilde - (1.-Prediction))**2)
 
-

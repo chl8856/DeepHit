@@ -121,7 +121,7 @@ class Model_DeepHit:
         tmp1 = I_1 * log(tmp1)
 
         #for censored: log \sum P(T>t|x)
-        tmp2 = tf.reduce_sum(tf.reduce_sum(self.fc_mask1 * self.out, reduction_indices=2), reduction_indices=1, keep_dims=True)
+        tmp2 = tf.reduce_sum(tf.reduce_sum(self.fc_mask2 * self.out, reduction_indices=2), reduction_indices=1, keep_dims=True)
         tmp2 = (1. - I_1) * log(tmp2)
 
         self.LOSS_1 = - tf.reduce_mean(tmp1 + 1.0*tmp2)

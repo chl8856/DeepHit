@@ -1,0 +1,6 @@
+python==3.7.0
+tensorflow==1.15.0
+numpy==1.16.0
+scikit-learn==0.21
+pandas==0.24
+lifelines==0.18.0
