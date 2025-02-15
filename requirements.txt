@@ -1,6 +1,5 @@
-python==3.7.0
-tensorflow==1.15.0
-numpy==1.16.0
-scikit-learn==0.21
-pandas==0.24
-lifelines==0.18.0
+python=3.7
+tensorflow=1.15
+numpy=1.14
+scikit-learn=0.20
+tensorflow=1.15
