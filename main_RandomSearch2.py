@@ -19,7 +19,7 @@ import numpy as np
 
 import import_data as impt
 
-
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 # this saves the current hyperparameters
 def save_logging(dictionary, log_name):
     with open(log_name, 'w') as f:
@@ -96,8 +96,7 @@ def get_random_hyperparameters(out_path):
 ##### MAIN SETTING
 OUT_ITERATION               = 5
 RS_ITERATION                = 50
-
-data_mode                   = 'METABRIC'
+data_mode                   = 'SYNTHETIC'
 seed                        = 1234
 
 
@@ -113,6 +112,7 @@ seed                        = 1234
     						  (This must be selected based on the dataset)
 
 '''
+
 if data_mode == 'SYNTHETIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SYNTHETIC(norm_mode = 'standard')
     EVAL_TIMES = [12, 24, 36]

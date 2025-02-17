@@ -49,7 +49,7 @@ def load_logging(filename):
 ##### MAIN SETTING
 OUT_ITERATION               = 5
 
-data_mode                   = 'SYNTHETIC' #METABRIC, SYNTHETIC
+data_mode                   = 'METABRIC' #METABRIC, SYNTHETIC
 seed                        = 1234
 
 EVAL_TIMES                  = [12, 24, 36] # evalution times (for C-index and Brier-Score)

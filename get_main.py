@@ -36,7 +36,8 @@ import utils_network as utils
 from class_DeepHit import Model_DeepHit
 from utils_eval import c_index, brier_score, weighted_c_index, weighted_brier_score
 
-
+# Set the logging level to suppress warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 0 = all messages, 1 = filter out INFO messages, 2 = filter out WARNING messages, 3 = filter out ERROR messages
 
 ##### USER-DEFINED FUNCTIONS
 def log(x):

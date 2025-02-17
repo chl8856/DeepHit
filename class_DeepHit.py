@@ -22,7 +22,6 @@ LOSS FUNCTIONS:
 import numpy as np
 import tensorflow as tf
 import random
-
 from tensorflow.contrib.layers import fully_connected as FC_Net
 
 ### user-defined functions
@@ -31,7 +30,13 @@ import utils_network as utils
 _EPSILON = 1e-08
 
 
+import os
+import tensorflow as tf
 
+# Set the logging level to suppress warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 0 = all messages, 1 = filter out INFO messages, 2 = filter out WARNING messages, 3 = filter out ERROR messages
+
+# Your TensorFlow code here
 ##### USER-DEFINED FUNCTIONS
 def log(x):
     return tf.math.log(x + _EPSILON)
