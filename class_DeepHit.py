@@ -34,7 +34,7 @@ _EPSILON = 1e-08
 
 ##### USER-DEFINED FUNCTIONS
 def log(x):
-    return tf.log(x + _EPSILON)
+    return tf.math.log(x + _EPSILON)
 
 def div(x, y):
     return tf.div(x, (y + _EPSILON))
@@ -66,21 +66,21 @@ class Model_DeepHit:
 
 
     def _build_net(self):
-        with tf.variable_scope(self.name):
+        with tf.compat.v1.variable_scope(self.name):
             #### PLACEHOLDER DECLARATION
-            self.mb_size     = tf.placeholder(tf.int32, [], name='batch_size')
-            self.lr_rate     = tf.placeholder(tf.float32, [], name='learning_rate')
-            self.keep_prob   = tf.placeholder(tf.float32, [], name='keep_probability')   #keeping rate
-            self.a           = tf.placeholder(tf.float32, [], name='alpha')
-            self.b           = tf.placeholder(tf.float32, [], name='beta')
-            self.c           = tf.placeholder(tf.float32, [], name='gamma')
+            self.mb_size     = tf.compat.v1.placeholder(tf.int32, [], name='batch_size')
+            self.lr_rate     = tf.compat.v1.placeholder(tf.float32, [], name='learning_rate')
+            self.keep_prob   = tf.compat.v1.placeholder(tf.float32, [], name='keep_probability')   #keeping rate
+            self.a           = tf.compat.v1.placeholder(tf.float32, [], name='alpha')
+            self.b           = tf.compat.v1.placeholder(tf.float32, [], name='beta')
+            self.c           = tf.compat.v1.placeholder(tf.float32, [], name='gamma')
 
-            self.x           = tf.placeholder(tf.float32, shape=[None, self.x_dim], name='inputs')
-            self.k           = tf.placeholder(tf.float32, shape=[None, 1], name='labels')     #event/censoring label (censoring:0)
-            self.t           = tf.placeholder(tf.float32, shape=[None, 1], name='timetoevents')
+            self.x           = tf.compat.v1.placeholder(tf.float32, shape=[None, self.x_dim], name='inputs')
+            self.k           = tf.compat.v1.placeholder(tf.float32, shape=[None, 1], name='labels')     #event/censoring label (censoring:0)
+            self.t           = tf.compat.v1.placeholder(tf.float32, shape=[None, 1], name='timetoevents')
 
-            self.fc_mask1    = tf.placeholder(tf.float32, shape=[None, self.num_Event, self.num_Category], name='mask1')  #for Loss 1
-            self.fc_mask2    = tf.placeholder(tf.float32, shape=[None, self.num_Category], name='mask2')  #for Loss 2 / Loss 3
+            self.fc_mask1    = tf.compat.v1.placeholder(tf.float32, shape=[None, self.num_Event, self.num_Category], name='mask1')  #for Loss 1
+            self.fc_mask2    = tf.compat.v1.placeholder(tf.float32, shape=[None, self.num_Category], name='mask2')  #for Loss 2 / Loss 3
 
 
             ##### SHARED SUBNETWORK w/ FCNETS
@@ -108,8 +108,8 @@ class Model_DeepHit:
             self.loss_Ranking()             #get loss2: Ranking loss
             self.loss_Calibration()         #get loss3: Calibration loss
 
-            self.LOSS_TOTAL = self.a*self.LOSS_1 + self.b*self.LOSS_2 + self.c*self.LOSS_3 + tf.losses.get_regularization_loss()
-            self.solver = tf.train.AdamOptimizer(learning_rate=self.lr_rate).minimize(self.LOSS_TOTAL)
+            self.LOSS_TOTAL = self.a*self.LOSS_1 + self.b*self.LOSS_2 + self.c*self.LOSS_3 + tf.compat.v1.losses.get_regularization_loss()
+            self.solver = tf.compat.v1.train.AdamOptimizer(learning_rate=self.lr_rate).minimize(self.LOSS_TOTAL)
 
 
     ### LOSS-FUNCTION 1 -- Log-likelihood loss
@@ -135,13 +135,13 @@ class Model_DeepHit:
         for e in range(self.num_Event):
             one_vector = tf.ones_like(self.t, dtype=tf.float32)
             I_2 = tf.cast(tf.equal(self.k, e+1), dtype = tf.float32) #indicator for event
-            I_2 = tf.diag(tf.squeeze(I_2))
+            I_2 = tf.linalg.tensor_diag(tf.squeeze(I_2))
             tmp_e = tf.reshape(tf.slice(self.out, [0, e, 0], [-1, 1, -1]), [-1, self.num_Category]) #event specific joint prob.
 
             R = tf.matmul(tmp_e, tf.transpose(self.fc_mask2)) #no need to divide by each individual dominator
             # r_{ij} = risk of i-th pat based on j-th time-condition (last meas. time ~ event time) , i.e. r_i(T_{j})
 
-            diag_R = tf.reshape(tf.diag_part(R), [-1, 1])
+            diag_R = tf.reshape(tf.linalg.tensor_diag_part(R), [-1, 1])
             R = tf.matmul(one_vector, tf.transpose(diag_R)) - R # R_{ij} = r_{j}(T_{j}) - r_{i}(T_{j})
             R = tf.transpose(R)                                 # Now, R_{ij} (i-th row j-th column) = r_{i}(T_{i}) - r_{j}(T_{i})
 

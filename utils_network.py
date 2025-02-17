@@ -91,12 +91,12 @@ def create_FCNet(inputs, num_layers, h_dim, h_fn, o_dim, o_fn, w_init, keep_prob
             if layer == 0:
                 h = FC_Net(inputs, h_dim, activation_fn=h_fn, weights_initializer=w_init, weights_regularizer=w_reg)
                 if not keep_prob is None:
-                    h = tf.nn.dropout(h, keep_prob=keep_prob)
+                    h = tf.nn.dropout(h, rate = 1 - keep_prob)
 
             elif layer > 0 and layer != (num_layers-1): # layer > 0:
                 h = FC_Net(h, h_dim, activation_fn=h_fn, weights_initializer=w_init, weights_regularizer=w_reg)
                 if not keep_prob is None:
-                    h = tf.nn.dropout(h, keep_prob=keep_prob)
+                    h = tf.nn.dropout(h, rate = 1 - keep_prob)
 
             else: # layer == num_layers-1 (the last layer)
                 out = FC_Net(h, o_dim, activation_fn=o_fn, weights_initializer=w_init, weights_regularizer=w_reg)

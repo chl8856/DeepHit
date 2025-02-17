@@ -97,7 +97,7 @@ def get_random_hyperparameters(out_path):
 OUT_ITERATION               = 5
 RS_ITERATION                = 50
 
-data_mode                   = 'SYNTHETIC'
+data_mode                   = 'METABRIC'
 seed                        = 1234
 
 

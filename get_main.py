@@ -109,16 +109,16 @@ def get_valid_performance(DATA, MASK, in_parser, out_itr, eval_time=None, MAX_VA
     print (file_path_final + ' (a:' + str(alpha) + ' b:' + str(beta) + ' c:' + str(gamma) + ')' )
 
     ##### CREATE DEEPFHT NETWORK
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
 
-    config = tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
+    sess = tf.compat.v1.Session(config=config)
 
     model = Model_DeepHit(sess, "DeepHit", input_dims, network_settings)
-    saver = tf.train.Saver()
+    saver = tf.compat.v1.train.Saver()
 
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.compat.v1.global_variables_initializer())
 
 
     ### TRAINING-TESTING SPLIT
