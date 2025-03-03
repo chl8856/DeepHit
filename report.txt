@@ -1,0 +1,139 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 7 files
+Detected 3 issues that require attention
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+File: ./DeepHit/utils_network.py
+--------------------------------------------------------------------------------
+./DeepHit/utils_network.py:32:19: WARNING: Using member tf.contrib.rnn.DropoutWrapper in deprecated module tf.contrib.rnn. (Manual edit required) tf.contrib.rnn.* has been deprecated, and widely used cells/functions will be moved to tensorflow/addons repository. Please check it there and file Github issues if necessary.
+./DeepHit/utils_network.py:32:19: ERROR: Using member tf.contrib.rnn.DropoutWrapper in deprecated module tf.contrib. tf.contrib.rnn.DropoutWrapper cannot be converted automatically. tf.contrib will not be distributed with TensorFlow 2.0, please consider an alternative in non-contrib TensorFlow, a community-maintained repository such as tensorflow/addons, or fork the required code.
+--------------------------------------------------------------------------------
+File: ./DeepHit/get_main.py
+--------------------------------------------------------------------------------
+./DeepHit/get_main.py:258:24: WARNING: *.save requires manual check. (This warning is only applicable if the code saves a tf.Keras model) Keras model.save now saves to the Tensorflow SavedModel format by default, instead of HDF5. To continue saving to HDF5, add the argument save_format='h5' to the save() function.
+================================================================================
+Detailed log follows:
+
+================================================================================
+================================================================================
+Input tree: './DeepHit'
+================================================================================
+--------------------------------------------------------------------------------
+Processing file './DeepHit/summarize_results.py'
+ outputting to './DeepHitTf2/summarize_results.py'
+--------------------------------------------------------------------------------
+
+121:16: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+164:4: INFO: Renamed 'tf.reset_default_graph' to 'tf.compat.v1.reset_default_graph'
+166:13: INFO: Renamed 'tf.ConfigProto' to 'tf.compat.v1.ConfigProto'
+168:11: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+171:12: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+173:13: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file './DeepHit/utils_network.py'
+ outputting to './DeepHitTf2/utils_network.py'
+--------------------------------------------------------------------------------
+
+28:19: INFO: Renamed 'tf.contrib.rnn.GRUCell' to 'tf.compat.v1.nn.rnn_cell.GRUCell'
+30:19: INFO: Renamed 'tf.contrib.rnn.LSTMCell' to 'tf.compat.v1.nn.rnn_cell.LSTMCell'
+32:19: WARNING: Using member tf.contrib.rnn.DropoutWrapper in deprecated module tf.contrib.rnn. (Manual edit required) tf.contrib.rnn.* has been deprecated, and widely used cells/functions will be moved to tensorflow/addons repository. Please check it there and file Github issues if necessary.
+32:19: ERROR: Using member tf.contrib.rnn.DropoutWrapper in deprecated module tf.contrib. tf.contrib.rnn.DropoutWrapper cannot be converted automatically. tf.contrib will not be distributed with TensorFlow 2.0, please consider an alternative in non-contrib TensorFlow, a community-maintained repository such as tensorflow/addons, or fork the required code.
+34:11: INFO: Renamed 'tf.contrib.rnn.MultiRNNCell' to 'tf.compat.v1.nn.rnn_cell.MultiRNNCell'
+87:17: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+108:24: INFO: Changing keep_prob arg of tf.nn.dropout to rate
+
+119:24: INFO: Changing keep_prob arg of tf.nn.dropout to rate
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file './DeepHit/import_data.py'
+ outputting to './DeepHitTf2/import_data.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file './DeepHit/get_main.py'
+ outputting to './DeepHitTf2/get_main.py'
+--------------------------------------------------------------------------------
+
+43:11: INFO: Renamed 'tf.log' to 'tf.math.log'
+47:11: INFO: Renamed 'tf.div' to 'tf.compat.v1.div'
+103:16: INFO: Changing tf.contrib.layers xavier initializer to a tf.compat.v1.keras.initializers.VarianceScaling and converting arguments.
+
+137:4: INFO: Renamed 'tf.reset_default_graph' to 'tf.compat.v1.reset_default_graph'
+139:13: INFO: Renamed 'tf.ConfigProto' to 'tf.compat.v1.ConfigProto'
+141:11: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+144:12: INFO: Renamed 'tf.train.Saver' to 'tf.compat.v1.train.Saver'
+146:13: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+258:24: WARNING: *.save requires manual check. (This warning is only applicable if the code saves a tf.Keras model) Keras model.save now saves to the Tensorflow SavedModel format by default, instead of HDF5. To continue saving to HDF5, add the argument save_format='h5' to the save() function.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file './DeepHit/class_DeepHit.py'
+ outputting to './DeepHitTf2/class_DeepHit.py'
+--------------------------------------------------------------------------------
+
+36:11: INFO: Renamed 'tf.log' to 'tf.math.log'
+40:11: INFO: Renamed 'tf.div' to 'tf.compat.v1.div'
+62:21: INFO: Multiplying scale arg of tf.contrib.layers.l2_regularizer by half to what tf.keras.regularizers.l2 expects.
+
+63:25: INFO: Renaming scale arg of regularizer
+
+68:13: INFO: Renamed 'tf.variable_scope' to 'tf.compat.v1.variable_scope'
+70:27: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+71:27: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+72:29: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+75:21: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+76:21: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+77:21: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+79:21: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+80:21: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+83:21: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+85:28: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+90:28: INFO: Renamed 'tf.placeholder' to 'tf.compat.v1.placeholder'
+127:18: INFO: Changing keep_prob arg of tf.nn.dropout to rate
+
+148:18: INFO: tf.losses.get_regularization_loss requires manual check. tf.losses have been replaced with object oriented versions in TF 2.0 and after. The loss function calls have been converted to compat.v1 for backward compatibility. Please update these calls to the TF 2.0 versions.
+148:18: INFO: Renamed 'tf.losses.get_regularization_loss' to 'tf.compat.v1.losses.get_regularization_loss'
+150:26: INFO: Renamed 'tf.train.AdamOptimizer' to 'tf.compat.v1.train.AdamOptimizer'
+161:12: INFO: Renamed keyword argument for tf.reduce_sum from reduction_indices to axis
+162:12: INFO: Renamed keyword argument for tf.reduce_sum from keep_dims to keepdims
+160:52: INFO: Renamed keyword argument for tf.reduce_sum from reduction_indices to axis
+169:12: INFO: Renamed keyword argument for tf.reduce_sum from reduction_indices to axis
+170:12: INFO: Renamed keyword argument for tf.reduce_sum from keep_dims to keepdims
+168:52: INFO: Renamed keyword argument for tf.reduce_sum from reduction_indices to axis
+186:18: INFO: Renamed 'tf.diag' to 'tf.linalg.tensor_diag'
+196:32: INFO: Renamed 'tf.diag_part' to 'tf.linalg.tensor_diag_part'
+217:41: INFO: Renamed keyword argument for tf.reduce_mean from reduction_indices to axis
+217:62: INFO: Renamed keyword argument for tf.reduce_mean from keep_dims to keepdims
+223:51: INFO: Renamed keyword argument for tf.reduce_mean from reduction_indices to axis
+223:72: INFO: Renamed keyword argument for tf.reduce_mean from keep_dims to keepdims
+244:32: INFO: Renamed keyword argument for tf.reduce_mean from reduction_indices to axis
+244:53: INFO: Renamed keyword argument for tf.reduce_mean from keep_dims to keepdims
+250:51: INFO: Renamed keyword argument for tf.reduce_mean from reduction_indices to axis
+250:72: INFO: Renamed keyword argument for tf.reduce_mean from keep_dims to keepdims
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file './DeepHit/utils_eval.py'
+ outputting to './DeepHitTf2/utils_eval.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file './DeepHit/main_RandomSearch.py'
+ outputting to './DeepHitTf2/main_RandomSearch.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------

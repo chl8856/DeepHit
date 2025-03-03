@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "deephit"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+tensorflow = "^2.18.0"
+lifelines = "^0.30.0"
+pandas = "^2.2.3"
+scikit-learn = "^1.6.1"
+numpy = "2.0.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+flake8 = "^7.1.2"
+isort = "^6.0.1"
+pre-commit = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
