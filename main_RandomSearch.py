@@ -16,6 +16,8 @@ OUTPUTS:
 import time, datetime, os
 import get_main
 import numpy as np
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import import_data as impt
 
@@ -97,28 +99,37 @@ def get_random_hyperparameters(out_path):
 OUT_ITERATION               = 5
 RS_ITERATION                = 50
 
-data_mode                   = 'METABRIC'
+data_mode                   = 'GPU' # 'SYNTHETIC', 'METABRIC', 'SEER', 'GPU'
 seed                        = 1234
-
 
 ##### IMPORT DATASET
 '''
     num_Category            = typically, max event/censoring time * 1.2 (to make enough time horizon)
-    num_Event               = number of evetns i.e. len(np.unique(label))-1
+    num_Event               = number of events i.e. len(np.unique(label))-1
     max_length              = maximum number of measurements
     x_dim                   = data dimension including delta (num_features)
     mask1, mask2            = used for cause-specific network (FCNet structure)
 
-    EVAL_TIMES              = set specific evaluation time horizons at which the validatoin performance is maximized. 
+    EVAL_TIMES              = set specific evaluation time horizons at which the validation performance is maximized. 
     						  (This must be selected based on the dataset)
 
 '''
 if data_mode == 'SYNTHETIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SYNTHETIC(norm_mode = 'standard')
-    EVAL_TIMES = [12, 24, 36]
+    percentiles = np.linspace(2, 100, 20)  # Adjust as needed
+    EVAL_TIMES = np.percentile(time.flatten(),percentiles)
 elif data_mode == 'METABRIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
-	EVAL_TIMES = [144, 288, 432] 
+    percentiles = np.linspace(2, 100, 20)  # Adjust as needed
+    EVAL_TIMES = np.percentile(time.flatten(),percentiles)
+elif data_mode == 'SEER':
+    (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SEER(norm_mode = 'standard')
+    percentiles = np.linspace(2, 100, 20)  # Adjust as needed
+    EVAL_TIMES = np.percentile(time.flatten(),percentiles)
+elif data_mode == 'GPU':
+    (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_GPU(norm_mode = 'standard')
+    percentiles = np.linspace(2, 100, 20)  # Adjust as needed
+    EVAL_TIMES = np.percentile(time.flatten(),percentiles)
 else:
     print('ERROR:  DATA_MODE NOT FOUND !!!')
 
@@ -129,7 +140,6 @@ MASK = (mask1, mask2) #masks are required to calculate loss functions without fo
 out_path      = data_mode + '/results/'
 
 for itr in range(OUT_ITERATION):
-    
     if not os.path.exists(out_path + '/itr_' + str(itr) + '/'):
         os.makedirs(out_path + '/itr_' + str(itr) + '/')
 
@@ -143,7 +153,7 @@ for itr in range(OUT_ITERATION):
         print(new_parser)
 
         # get validation performance given the hyperparameters
-        tmp_max = get_main.get_valid_performance(DATA, MASK, new_parser, itr, EVAL_TIMES, MAX_VALUE=max_valid)
+        tmp_max = get_main.get_valid_performance(DATA, MASK, new_parser, itr, EVAL_TIMES, MAX_VALUE=max_valid, r_itr=r_itr)
 
         if tmp_max > max_valid:
             max_valid = tmp_max

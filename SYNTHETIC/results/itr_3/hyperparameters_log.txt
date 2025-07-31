@@ -1,0 +1,13 @@
+mb_size:256
+iteration:50000
+keep_prob:0.6
+lr_train:0.0001
+h_dim_shared:300
+h_dim_CS:200
+num_layers_shared:2
+num_layers_CS:1
+active_fn:relu
+alpha:1.0
+beta:3.0
+gamma:0
+out_path:SYNTHETIC/results/

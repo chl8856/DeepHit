@@ -2,9 +2,10 @@ _EPSILON = 1e-08
 
 import numpy as np
 import pandas as pd
-import tensorflow as tf
 import random
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import tensorflow as tf
 # import sys
 
 from termcolor import colored
@@ -50,7 +51,7 @@ def load_logging(filename):
 OUT_ITERATION               = 5
 
 data_mode                   = 'SYNTHETIC' #METABRIC, SYNTHETIC
-seed                        = 1234
+seed                        =  1234
 
 EVAL_TIMES                  = [12, 24, 36] # evalution times (for C-index and Brier-Score)
 
@@ -69,6 +70,14 @@ if data_mode == 'SYNTHETIC':
 elif data_mode == 'METABRIC':
     (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_METABRIC(norm_mode = 'standard')
     EVAL_TIMES  = [144, 288, 432]
+elif data_mode == 'SEER':
+    (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_SEER(norm_mode = 'standard')
+    percentiles = np.linspace(2, 100, 20)  # Adjust as needed
+    EVAL_TIMES = np.percentile(time.flatten(),percentiles)
+elif data_mode == 'GPU':
+    (x_dim), (data, time, label), (mask1, mask2) = impt.import_dataset_GPU(norm_mode = "standard")
+    percentiles = np.linspace(2, 100, 20)  # Adjust as needed
+    EVAL_TIMES = np.percentile(time.flatten(),percentiles)
 else:
     print('ERROR:  DATA_MODE NOT FOUND !!!')
 
@@ -242,3 +251,17 @@ print('--------------------------------------------------------')
 print('- FINAL BRIER-SCORE: ')
 print(df2_mean)
 print('========================================================')
+
+
+import matplotlib.pyplot as plt
+values_to_plot = pred[0, 0, :]  # Extracting the first value along the last axis
+plt.plot(values_to_plot)
+ 
+plt.stem(values_to_plot, linefmt='b-', markerfmt='bo', basefmt=" ")
+plt.show()
+ 
+values_to_plot = pred[0, 1, :]  # Extracting the first value along the last axis
+plt.plot(values_to_plot)
+ 
+plt.stem(values_to_plot, linefmt='b-', markerfmt='bo', basefmt=" ")
+plt.show()

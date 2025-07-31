@@ -21,9 +21,10 @@ _EPSILON = 1e-08
 
 import numpy as np
 import pandas as pd
-import tensorflow as tf
 import random
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import tensorflow as tf
 # import sys
 
 from termcolor import colored
@@ -35,8 +36,6 @@ import utils_network as utils
 
 from class_DeepHit import Model_DeepHit
 from utils_eval import c_index, brier_score, weighted_c_index, weighted_brier_score
-
-
 
 ##### USER-DEFINED FUNCTIONS
 def log(x):
@@ -57,7 +56,8 @@ def f_get_minibatch(mb_size, x, label, time, mask1, mask2):
     return x_mb, k_mb, t_mb, m1_mb, m2_mb
 
 
-def get_valid_performance(DATA, MASK, in_parser, out_itr, eval_time=None, MAX_VALUE = -99, OUT_ITERATION=5, seed=1234):
+def get_valid_performance(DATA, MASK, in_parser, out_itr, eval_time=None, MAX_VALUE = -99, OUT_ITERATION=5, r_itr=None):
+    seed                 = 1234
     ##### DATA & MASK
     (data, time, label)  = DATA
     (mask1, mask2)       = MASK
@@ -109,16 +109,16 @@ def get_valid_performance(DATA, MASK, in_parser, out_itr, eval_time=None, MAX_VA
     print (file_path_final + ' (a:' + str(alpha) + ' b:' + str(beta) + ' c:' + str(gamma) + ')' )
 
     ##### CREATE DEEPFHT NETWORK
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
 
-    config = tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
+    sess = tf.compat.v1.Session(config=config)
 
     model = Model_DeepHit(sess, "DeepHit", input_dims, network_settings)
-    saver = tf.train.Saver()
+    saver = tf.compat.v1.train.Saver()
 
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.compat.v1.global_variables_initializer())
 
 
     ### TRAINING-TESTING SPLIT

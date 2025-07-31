@@ -1,0 +1,314 @@
+Column: Radiation recode
+  Beam radiation -> 0
+  None/Unknown -> 2
+  Radioactive implants (includes brachytherapy) (1988+) -> 3
+  Radioisotopes (1988+) -> 4
+  Combination of beam with implants or isotopes -> 1
+  Refused (1988+) -> 5
+
+Column: Chemotherapy recode
+  Yes -> 1
+  No/Unknown -> 0
+
+Column: Radiation sequence with surgery
+  Radiation after surgery -> 3
+  No radiation and/or cancer-directed surgery -> 2
+  Radiation before and after surgery -> 4
+  Radiation prior to surgery -> 5
+  Intraoperative radiation -> 1
+  Intraoperative rad with other rad before/after surgery -> 0
+  Surgery both before and after radiation -> 6
+
+Column: ER Status Recode Breast Cancer (1990+)
+  Negative -> 1
+  Positive -> 2
+  Unknown -> 3
+  Borderline -> 0
+
+Column: PR Status Recode Breast Cancer (1990+)
+  Negative -> 1
+  Positive -> 2
+  Unknown -> 3
+  Borderline -> 0
+
+Column: CS tumor size (2004-2015)
+  25 -> 87
+  36 -> 103
+  6 -> 130
+  1 -> 1
+  17 -> 60
+  46 -> 115
+  990 -> 182
+  11 -> 13
+  14 -> 42
+  48 -> 117
+  18 -> 65
+  15 -> 47
+  10 -> 2
+  12 -> 23
+  7 -> 142
+  24 -> 84
+  90 -> 169
+  32 -> 98
+  21 -> 78
+  4 -> 107
+  13 -> 34
+  130 -> 35
+  38 -> 105
+  19 -> 70
+  52 -> 122
+  23 -> 82
+  999 -> 191
+  100 -> 3
+  56 -> 126
+  120 -> 24
+  150 -> 48
+  54 -> 124
+  50 -> 120
+  33 -> 100
+  9 -> 168
+  35 -> 102
+  8 -> 156
+  2 -> 74
+  70 -> 143
+  20 -> 75
+  26 -> 88
+  72 -> 147
+  45 -> 114
+  5 -> 119
+  37 -> 104
+  991 -> 183
+  28 -> 92
+  40 -> 108
+  27 -> 90
+  22 -> 80
+  0 -> 0
+  60 -> 131
+  16 -> 53
+  3 -> 94
+  29 -> 93
+  55 -> 125
+  30 -> 95
+  106 -> 9
+  79 -> 155
+  42 -> 110
+  44 -> 112
+  170 -> 61
+  65 -> 137
+  998 -> 190
+  57 -> 127
+  114 -> 17
+  110 -> 14
+  75 -> 150
+  97 -> 177
+  64 -> 136
+  47 -> 116
+  61 -> 133
+  31 -> 97
+  43 -> 111
+  51 -> 121
+  80 -> 157
+  34 -> 101
+  153 -> 50
+  83 -> 161
+  82 -> 160
+  66 -> 138
+  180 -> 66
+  86 -> 164
+  105 -> 8
+  116 -> 19
+  78 -> 153
+  123 -> 27
+  49 -> 118
+  995 -> 187
+  39 -> 106
+  41 -> 109
+  73 -> 148
+  103 -> 6
+  53 -> 123
+  240 -> 85
+  994 -> 186
+  800 -> 158
+  140 -> 43
+  127 -> 31
+  63 -> 135
+  993 -> 185
+  95 -> 175
+  108 -> 11
+  71 -> 145
+  62 -> 134
+  132 -> 37
+  85 -> 163
+  992 -> 184
+  68 -> 140
+  58 -> 128
+  89 -> 167
+  220 -> 81
+  76 -> 151
+  81 -> 159
+  69 -> 141
+  119 -> 22
+  59 -> 129
+  200 -> 76
+  99 -> 181
+  77 -> 152
+  101 -> 4
+  160 -> 54
+  190 -> 71
+  88 -> 166
+  112 -> 15
+  129 -> 33
+  115 -> 18
+  87 -> 165
+  92 -> 172
+  94 -> 174
+  Blank(s) -> 192
+  84 -> 162
+  172 -> 63
+  137 -> 41
+  135 -> 39
+  996 -> 188
+  162 -> 56
+  117 -> 20
+  98 -> 178
+  96 -> 176
+  67 -> 139
+  210 -> 79
+  109 -> 12
+  440 -> 113
+  161 -> 55
+  230 -> 83
+  91 -> 170
+  270 -> 91
+  165 -> 57
+  125 -> 29
+  989 -> 180
+  145 -> 45
+  74 -> 149
+  600 -> 132
+  185 -> 69
+  320 -> 99
+  134 -> 38
+  131 -> 36
+  102 -> 5
+  700 -> 144
+  104 -> 7
+  136 -> 40
+  155 -> 51
+  107 -> 10
+  175 -> 64
+  121 -> 25
+  181 -> 67
+  93 -> 173
+  198 -> 73
+  202 -> 77
+  118 -> 21
+  997 -> 189
+  124 -> 28
+  147 -> 46
+  710 -> 146
+  126 -> 30
+  166 -> 58
+  197 -> 72
+  159 -> 52
+  243 -> 86
+  122 -> 26
+  988 -> 179
+  300 -> 96
+  142 -> 44
+  910 -> 171
+  260 -> 89
+  113 -> 16
+  128 -> 32
+  167 -> 59
+  171 -> 62
+  152 -> 49
+  780 -> 154
+  184 -> 68
+
+Column: Derived HER2 Recode (2010+)
+  Positive -> 2
+  Negative -> 1
+  Unknown -> 3
+  Borderline -> 0
+
+Column: COD to site recode
+  Alive -> 4
+  Breast -> 10
+  Diseases of Heart -> 21
+  Alzheimers (ICD-9 and 10 only) -> 5
+  Miscellaneous Malignant Cancer -> 31
+  State DC not available or state DC available but no COD -> 52
+  Other Cause of Death -> 38
+  Septicemia -> 49
+  Ovary -> 43
+  Diabetes Mellitus -> 20
+  Chronic Liver Disease and Cirrhosis -> 13
+  Pancreas -> 44
+  Chronic Obstructive Pulmonary Disease and Allied Cond -> 16
+  Colon excluding Rectum -> 17
+  Lung and Bronchus -> 29
+  Esophagus -> 22
+  Cerebrovascular Diseases -> 11
+  Aortic Aneurysm and Dissection -> 6
+  Pneumonia and Influenza -> 45
+  Accidents and Adverse Effects -> 0
+  Hypertension without Heart Disease -> 25
+  Acute Myeloid Leukemia -> 3
+  Salivary Gland -> 48
+  Thyroid -> 56
+  Corpus Uteri -> 19
+  Melanoma of the Skin -> 30
+  Cervix Uteri -> 12
+  Non-Hodgkin Lymphoma -> 33
+  Myeloma -> 32
+  Stomach and Duodenal Ulcers -> 54
+  Brain and Other Nervous System -> 9
+  Other Infectious and Parasitic Diseases including HIV -> 40
+  Other Acute Leukemia -> 36
+  Kidney and Renal Pelvis -> 27
+  Liver -> 28
+  Chronic Lymphocytic Leukemia -> 14
+  Suicide and Self-Inflicted Injury -> 55
+  Urinary Bladder -> 59
+  Intrahepatic Bile Duct -> 26
+  Atherosclerosis -> 7
+  Soft Tissue including Heart -> 51
+  Homicide and Legal Intervention -> 24
+  Congenital Anomalies -> 18
+  Stomach -> 53
+  Other Biliary -> 37
+  Rectum and Rectosigmoid Junction -> 47
+  Tuberculosis -> 58
+  Gallbladder -> 23
+  Small Intestine -> 50
+  Other Digestive Organs -> 39
+  Tongue -> 57
+  Acute Lymphocytic Leukemia -> 1
+  Oropharynx -> 35
+  Other Oral Cavity and Pharynx -> 42
+  Bones and Joints -> 8
+  Vulva -> 60
+  Acute Monocytic Leukemia -> 2
+  Non-Melanoma Skin -> 34
+  Other Lymphocytic Leukemia -> 41
+  Prostate -> 46
+  Chronic Myeloid Leukemia -> 15
+
+Column: Race recode
+  White -> 2
+  Black -> 0
+  Unknown -> 1
+
+Column: Sex
+  Female -> 0
+  Male -> 1
+
+Column: Vital status recode (study cutoff used)
+  Alive -> 0
+  Dead -> 1
+
+Column: stutus_5_years
+  Alive -> 0
+  Dead -> 1
+
